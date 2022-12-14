@@ -13,7 +13,7 @@ class Ebx extends StatefulWidget {
 }
 
 class _EbxState extends State<Ebx> {
-  RxEasy _rxEasy = RxEasy();
+  final RxEasy _rxEasy = RxEasy();
 
   @override
   void initState() {

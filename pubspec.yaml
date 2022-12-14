@@ -38,6 +38,11 @@ dependencies:
   platform_device_id: ^1.0.1
   device_info_plus: ^4.0.0
   websocket_channel_wrapper: ^1.1.4
+  firebase_messaging: 11.2.7
+  agora_rtc_engine:
+    git:
+      url: https://github.com/AgoraIO/Agora-Flutter-SDK.git
+      ref: 5.3.1-sp.4000
 
 
 #  flutter_echart: ^1.0.0

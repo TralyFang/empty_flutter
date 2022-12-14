@@ -8,12 +8,50 @@
 import 'dart:async';
 
 import 'package:empty_flutter/completer.dart';
+import 'package:empty_flutter/controller.dart' as actr;
+import 'package:empty_flutter/getx/controller.dart' as bctr;
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:empty_flutter/main.dart';
 
 void main() {
+
+  bool subContain(Set<String> set, String router) {
+    return set.where((String element) => element.contains(router)).isNotEmpty;
+    return set.map((String e) => e.contains(router)).toList().contains(true);
+  }
+
+  test('toString', (){
+    var ctr = actr.EasyXController();
+    expect(ctr.toString(), 'Instance of \'EasyXController\'');
+    expect(ctr.runtimeType.toString(), 'EasyXController');
+
+    var b = bctr.EasyXController();
+    expect(b.toString(), 'Instance of \'EasyXController\'');
+    expect(b.runtimeType, bctr.EasyXController);
+    expect(b.runtimeType, 'EasyXController');
+
+  });
+
+  test('list remove', (){
+    var list2 = ['flutter://re_login', 'flutter://login_indoor/false', 'flutter://index_page', 'flutter://index_page'];
+    // list2.remove('flutter://index_page');
+    list2.removeWhere((element) => element=='flutter://index_page');
+    expect(list2, ['flutter://re_login', 'flutter://login_indoor/false']);
+
+  });
+
+  test('set remove', (){
+    Set<String> list2 = {'flutter://re_login', 'flutter://login_indoor/false', 'flutter://index_page', 'flutter://index_page'};
+    list2.remove('flutter://index_page');
+    // list2.removeWhere((element) => element=='flutter://index_page');
+    expect(list2, {'flutter://re_login', 'flutter://login_indoor/false'});
+
+    expect(subContain(list2, 'login_indoor'), true);
+    expect(subContain(list2, 'login_indoor1'), false);
+
+  });
 
   test('list.firstWhere', (){
     List<int?> list = List.filled(10, null);
