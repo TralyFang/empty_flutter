@@ -2,8 +2,11 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:empty_flutter/completer.dart';
+import 'package:empty_flutter/mounted/mounted_animation.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+
+import 'mounted/nav_observers.dart';
 
 void main() {
   runApp(const MyApp());
@@ -16,6 +19,13 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      navigatorObservers: [YBDRouteObserver()],
+      initialRoute: 'HomePage.routeName',
+      routes: <String, WidgetBuilder>{
+        SecondPage.routeName: (_) => const SecondPage(''),
+        "/initialRoute": (_) => const MyApp(),
+        'HomePage.routeName': (_) => MountedAnimation(),
+      },
       title: 'Flutter Demo',
       theme: ThemeData(
         // This is the theme of your application.
@@ -52,13 +62,13 @@ class MyHomePage extends StatefulWidget {
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateMixin {
+class _MyHomePageState extends State<MyHomePage>
+    with SingleTickerProviderStateMixin {
   int _counter = 0;
 
   @override
   void initState() {
     super.initState();
-
   }
 
   Future<void> _incrementCounter() async {
@@ -74,6 +84,9 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
     doSomething().then((value) {
       print('then:${DateTime.now()}: $value');
     });
+
+    Navigator.push(context,
+        MaterialPageRoute(builder: (context) => MountedAnimation()));
   }
 
   Future doSomething() {
@@ -135,12 +148,9 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
               '$_counter',
               style: Theme.of(context).textTheme.headline4,
             ),
-            if (true)
-              _ttimeBBuilder(),
-            if (_counter % 2 == 0)
-              PageTwo(),
+            if (true) _ttimeBBuilder(),
+            if (_counter % 2 == 0) PageTwo(),
           ],
-
         ),
       ),
       floatingActionButton: FloatingActionButton(
@@ -152,25 +162,23 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
   }
 
   _ttimeBBuilder() {
-    return Builder(
-        builder: (BuildContext context) {
-
-          print('${DateTime.now()} start');
-          var jsonDict = null;
-          int re = 0;
-          for (int i=0; i< 100000; i++) {
-            int cc = i*2 + 300;
-            re += (cc + 3);
-            jsonDict = jsonDecode("""
+    return Builder(builder: (BuildContext context) {
+      print('${DateTime.now()} start');
+      var jsonDict = null;
+      int re = 0;
+      for (int i = 0; i < 100000; i++) {
+        int cc = i * 2 + 300;
+        re += (cc + 3);
+        jsonDict = jsonDecode("""
                       {"name":"nickname"}
                       """);
-          }
-          re += _counter;
-          print('${DateTime.now()} end, re:$re, $jsonDict');
-          return Text('$re, $jsonDict');});
+      }
+      re += _counter;
+      print('${DateTime.now()} end, re:$re, $jsonDict');
+      return Text('$re, $jsonDict');
+    });
   }
 }
-
 
 class PageTwo extends StatelessWidget {
   @override
@@ -187,7 +195,11 @@ class PageTwo extends StatelessWidget {
   }
 
   static int _fibonacci(int i) {
-    if(i <= 1) return i;
+    if (i <= 1) return i;
     return _fibonacci(i - 1) + _fibonacci(i - 2);
+  }
+
+  void _hello() {
+
   }
 }

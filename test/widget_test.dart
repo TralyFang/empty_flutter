@@ -30,7 +30,7 @@ void main() {
     var b = bctr.EasyXController();
     expect(b.toString(), 'Instance of \'EasyXController\'');
     expect(b.runtimeType, bctr.EasyXController);
-    expect(b.runtimeType, 'EasyXController');
+    expect(b.runtimeType.toString(), 'EasyXController');
 
   });
 
