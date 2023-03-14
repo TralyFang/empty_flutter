@@ -1,11 +1,14 @@
 import 'dart:async';
 
+// 对状态根据操作进行处理，并返回状态：状态加工
 typedef Reducer<State> = State Function(State state, dynamic action);
 
+// 等同于typedef
 abstract class ReducerClass<State> {
   State call(State state, dynamic action);
 }
 
+// 中间状态处理：
 typedef Middleware<State> = dynamic Function(Store<State> store, dynamic action, NextDispatcher next);
 
 abstract class MiddlewareClass<State> {

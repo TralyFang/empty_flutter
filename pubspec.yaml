@@ -43,6 +43,7 @@ dependencies:
     git:
       url: https://github.com/AgoraIO/Agora-Flutter-SDK.git
       ref: 5.3.1-sp.4000
+  dio_cache_interceptor: ^3.4.0
 
 
 #  flutter_echart: ^1.0.0

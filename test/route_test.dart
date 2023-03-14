@@ -49,6 +49,14 @@ void main() {
     isABC('A1234656B123456C');
   });
 
+  test('&|=', () {
+    bool isTure = true;
+    isTure &= 1>2 || 1==1;
+    expect(isTure, true);
+    isTure |= 1>2;
+    expect(isTure, true);
+  });
+
 
 
 }

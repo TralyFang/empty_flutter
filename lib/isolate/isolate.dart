@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:isolate';
 
 import 'package:flutter/foundation.dart';
@@ -13,6 +14,10 @@ class TTIsolate {
   late Isolate isolate2;
 
   void createTask() async {
+
+    var model = await compute(jsonDecode, 'jsonString');
+
+
     ReceivePort receivePort = ReceivePort();
     isolate = await Isolate.spawn(sendP1, receivePort.sendPort);
     receivePort.listen((data) {
