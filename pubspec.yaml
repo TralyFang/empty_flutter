@@ -43,8 +43,10 @@ dependencies:
     git:
       url: https://github.com/AgoraIO/Agora-Flutter-SDK.git
       ref: 5.3.1-sp.4000
-  dio_cache_interceptor: ^3.4.0
-
+  dio_cache_interceptor: ^3.4.0 #dio拦截缓存器
+  get_storage: ^2.1.1 # 数据储存
+  get_it: ^7.2.0
+  get_it_mixin: ^4.1.1
 
 #  flutter_echart: ^1.0.0
 #Error: Cannot run with sound null safety, because the following dependencies

@@ -6,6 +6,7 @@ import 'package:empty_flutter/mounted/mounted_animation.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
+import 'get_it/get_it_demo.dart';
 import 'mounted/nav_observers.dart';
 
 void main() {
@@ -20,7 +21,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       navigatorObservers: [YBDRouteObserver()],
-      initialRoute: 'HomePage.routeName',
+      // initialRoute: 'HomePage.routeName',
       routes: <String, WidgetBuilder>{
         SecondPage.routeName: (_) => const SecondPage(''),
         "/initialRoute": (_) => const MyApp(),
@@ -68,10 +69,15 @@ class _MyHomePageState extends State<MyHomePage>
 
   @override
   void initState() {
+    UserHandler.initHandler();
     super.initState();
   }
 
   Future<void> _incrementCounter() async {
+
+    UserHandler.change('name_', _counter++);
+    return;
+
     setState(() {
       // This call to setState tells the Flutter framework that something has
       // changed in this State, which causes it to rerun the build method below
@@ -150,6 +156,7 @@ class _MyHomePageState extends State<MyHomePage>
             ),
             if (true) _ttimeBBuilder(),
             if (_counter % 2 == 0) PageTwo(),
+            UserInfoWidget(),
           ],
         ),
       ),
