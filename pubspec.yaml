@@ -47,6 +47,8 @@ dependencies:
   get_storage: ^2.1.1 # 数据储存
   get_it: ^7.2.0
   get_it_mixin: ^4.1.1
+  flutter_colorpicker: ^1.0.3
+  url_launcher: any
 
 #  flutter_echart: ^1.0.0
 #Error: Cannot run with sound null safety, because the following dependencies
