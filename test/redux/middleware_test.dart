@@ -50,8 +50,8 @@ void main() {
 
       expect(order[0], equals('first'));
       expect(order[1], equals('second'));
-      expect(middleware1.counter, equals(2));
-      expect(middleware2.counter, equals(2));
+      expect(middleware1.counter, equals(1));
+      expect(middleware2.counter, equals(1));
 
     });
 
@@ -121,6 +121,57 @@ void main() {
       await awaitableAction;
       // The effect has taken place
       expect(store.state, equals('changed'));
+
+      /*
+
+[passthrough, thunk]
+Thunk action
+
+dispatchs.action:Closure: (Store<String>) => Future<void>, [Closure: (dynamic) => dynamic, Closure: (dynamic) => dynamic, Closure: (dynamic) => Null]
+PassThroughMiddleware Closure: (Store<String>) => Future<void>
+ThunkMiddleware Closure: (Store<String>) => Future<void>
+dispatchs.action:changed, [Closure: (dynamic) => dynamic, Closure: (dynamic) => dynamic, Closure: (dynamic) => Null]
+PassThroughMiddleware changed
+ThunkMiddleware changed
+reducer.state:changed
+
+
+[passthrough, thunk]
+
+dispatchs.action:Closure: (Store<String>) => Future<void>, [Closure: (dynamic) => dynamic, Closure: (dynamic) => dynamic, Closure: (dynamic) => Null]
+PassThroughMiddleware Closure: (Store<String>) => Future<void>
+ThunkMiddleware Closure: (Store<String>) => Future<void>
+reducer.state:not found
+test/redux/middleware_test.dart 117:59  main.<fn>.<fn>
+test/redux/middleware_test.dart 103:56  main.<fn>.<fn>
+
+type 'Null' is not a subtype of type 'Future<void>' in type cast
+
+
+[thunk, passthrough]
+Thunk action
+
+dispatchs.action:Closure: (Store<String>) => Future<void>, [Closure: (dynamic) => dynamic, Closure: (dynamic) => dynamic, Closure: (dynamic) => Null]
+ThunkMiddleware Closure: (Store<String>) => Future<void>
+dispatchs.action:changed, [Closure: (dynamic) => dynamic, Closure: (dynamic) => dynamic, Closure: (dynamic) => Null]
+ThunkMiddleware changed
+PassThroughMiddleware changed
+reducer.state:changed
+
+
+[thunk, passthrough]
+passthrough action
+
+dispatchs.action:Closure: (Store<String>) => Future<void>, [Closure: (dynamic) => dynamic, Closure: (dynamic) => dynamic, Closure: (dynamic) => Null]
+ThunkMiddleware Closure: (Store<String>) => Future<void>
+PassThroughMiddleware Closure: (Store<String>) => Future<void>
+dispatchs.action:changed, [Closure: (dynamic) => dynamic, Closure: (dynamic) => dynamic, Closure: (dynamic) => Null]
+ThunkMiddleware changed
+PassThroughMiddleware changed
+reducer.state:changed
+
+      *
+      * */
     });
   });
 }

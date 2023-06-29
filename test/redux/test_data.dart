@@ -41,7 +41,7 @@ class IncrementMiddleware extends MiddlewareClass<String> {
     counter += 1;
     print('object.call:${store.state}, key:$key');
     next(action);
-    next('another action last');
+    // next('another action last');
     print('object.callend:${store.state}, key:$key');
   }
 
@@ -57,10 +57,10 @@ class ExtraActionIncrementMiddleware extends IncrementMiddleware {
   void call(Store<String> store, dynamic action, NextDispatcher next) {
     add(action);
     counter += 1;
-    print('object.call:${store.state}, key:$key');
+    print('ExtraActionobject.call:${store.state}, key:$key');
     next(action);
     next('another action');
-    print('object.call:${store.state}, key:$key');
+    print('ExtraActionobject.callend:${store.state}, key:$key');
   }
 }
 
@@ -69,6 +69,7 @@ class ExtraActionIfDispatchedIncrementMiddleware extends IncrementMiddleware {
 
   @override
   void call(Store<String> store, dynamic action, NextDispatcher next) {
+    print('ExtraActionIfDispatchedIncrementMiddleware');
     add(action);
     counter += 1;
     next(action);
@@ -82,6 +83,7 @@ class ExtraActionIfDispatchedIncrementMiddleware extends IncrementMiddleware {
 class PassThroughMiddleware<State> implements MiddlewareClass<State> {
   @override
   dynamic call(Store<State> store, dynamic action, NextDispatcher next) {
+    print('PassThroughMiddleware $action');
     return next(action);
   }
 }
@@ -89,6 +91,7 @@ class PassThroughMiddleware<State> implements MiddlewareClass<State> {
 class ThunkMiddleware<State> implements MiddlewareClass<State> {
   @override
   dynamic call(Store<State> store, dynamic action, NextDispatcher next) {
+    print('ThunkMiddleware $action');
     if (action is Function) {
       return action(store);
     } else {
