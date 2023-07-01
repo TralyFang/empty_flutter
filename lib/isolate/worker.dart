@@ -30,10 +30,10 @@ class Worker {
 
   Future reuqest(dynamic message) async {
     await _isolateReady.future;
-    final completer = new Completer();
-    final requestId = new Capability();
+    final completer = Completer();
+    final requestId = Capability();
     _completers[requestId] = completer;
-    _sendPort.send(new _Request(requestId, message));
+    _sendPort.send(_Request(requestId, message));
     return completer.future;
   }
 

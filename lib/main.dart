@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:empty_flutter/completer.dart';
+import 'package:empty_flutter/isolate/isolate.dart';
 import 'package:empty_flutter/mounted/mounted_animation.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -75,8 +76,9 @@ class _MyHomePageState extends State<MyHomePage>
 
   Future<void> _incrementCounter() async {
 
+    TTScheduleIsolate.test();
+
     UserHandler.change('name_', _counter++);
-    return;
 
     setState(() {
       // This call to setState tells the Flutter framework that something has
@@ -91,8 +93,8 @@ class _MyHomePageState extends State<MyHomePage>
       print('then:${DateTime.now()}: $value');
     });
 
-    Navigator.push(context,
-        MaterialPageRoute(builder: (context) => MountedAnimation()));
+    // Navigator.push(context,
+    //     MaterialPageRoute(builder: (context) => MountedAnimation()));
   }
 
   Future doSomething() {
