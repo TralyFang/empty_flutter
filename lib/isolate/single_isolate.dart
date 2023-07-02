@@ -24,7 +24,12 @@ class SingleIsolate {
   /// 等待中的队列
   static final List<Map<SingleIsolate, IsolateHandler>> _waitIsolateList = [];
   /// isolate对象
-  late Isolate isolate;
+  static late Isolate isolate;
+  /// 子isolate SendPort
+  static late SendPort subSendport;
+  static late SendPort mainSendport;
+  static bool isolateIsKill = true;
+
   /// isolate传递的回调
   final Map<SendPort, ThreadHandler> mapThreadHandler = {};
 
@@ -39,12 +44,24 @@ class SingleIsolate {
       return;
     }
     _countIsolate ++;
+
+    if (!isolateIsKill) {
+      log('init pre isolate...${isolate.controlPort.hashCode}, $_countIsolate, max:$_maxIsolate, wait: ${_waitIsolateList.length}');
+
+      mapThreadHandler[mainSendport] = threadHandler;
+      subSendport.send(mapThreadHandler);
+      return;
+    }
     log('init isolate...$_countIsolate, max:$_maxIsolate, wait: ${_waitIsolateList.length}');
+
+
     ReceivePort receivePort = ReceivePort();
     receivePort.listen((data) {
+      log('isolate listen data: $data, wait:${_waitIsolateList.isEmpty}, ${receivePort.sendPort.hashCode}');
       if (data is SendPort) {
         SendPort sendPort = data;
         sendPort.send(mapThreadHandler);
+        subSendport = sendPort;
         return;
       }
       try {
@@ -54,23 +71,33 @@ class SingleIsolate {
         log('mainHandler error: $e');
       }
       mapThreadHandler.remove(receivePort.sendPort);
-      // 一次性的数据处理完成了，需要销毁资源
-      receivePort.close();
-      dispose();
+      // if (_waitIsolateList.isEmpty) {
+      //   // 一次性的数据处理完成了，需要销毁资源
+      //   receivePort.close();
+      //   subSendport.send('close');
+      //   // isolate.kill();
+      //   isolateIsKill = true;
+      // }
+      disposeNext();
 
     });
+    mainSendport = receivePort.sendPort;
     mapThreadHandler[receivePort.sendPort] = threadHandler;
     isolate = await Isolate.spawn(_sendPortHandler, receivePort.sendPort);
+    isolateIsKill = false;
   }
 
-  void dispose() {
+  void disposeNext() {
     _countIsolate--;
-    isolate.kill();
     if (_waitIsolateList.isNotEmpty) {
       var entity = _waitIsolateList.first.keys.first;
       var handler = _waitIsolateList.first.values.first;
       entity.init(threadHandler: handler.threadHandler, mainHandler: handler.mainHandler);
       _waitIsolateList.removeAt(0);
+    }else {
+      // 这里杀掉了，所有的ReceivePort也就没有了
+      isolate.kill();
+      isolateIsKill = true;
     }
   }
 
@@ -78,6 +105,7 @@ class SingleIsolate {
   static void _sendPortHandler(SendPort sendPort) {
     ReceivePort receivePort = ReceivePort();
     receivePort.listen((data) {
+      log('_sendPortHandler listen data: $data, ${sendPort.hashCode}');
       if (data is Map<SendPort, ThreadHandler>) {
         final Map<SendPort, ThreadHandler> mapThreadHandler = data;
         var handlerData;
@@ -88,9 +116,10 @@ class SingleIsolate {
           log('threadHandler error: $e');
         }
         sendPort.send(handlerData);
+        return;
+      }else if (data == 'close') {
         // 任务完成了，就关闭吧
         receivePort.close();
-        return;
       }
     });
     sendPort.send(receivePort.sendPort);
