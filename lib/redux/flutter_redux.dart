@@ -241,6 +241,7 @@ class _StoreStreamListenerState<S, ViewModel>
     return true;
   }
   void _createStream() {
+    /// _ignoreChange 直接过滤了流，但不记录状态
     _stream = widget.store.onChange
         .where(_ignoreChange)
         .map(_mapConverter)

@@ -37,6 +37,7 @@ void main() {
 
       await tester.pumpWidget(widget);
 
+      /// 产生一个异常信息，就是 StoreProviderError
       expect(tester.takeException(), isInstanceOf<StoreProviderError>());
     });
 
