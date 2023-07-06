@@ -1,4 +1,5 @@
 
+import 'dart:async';
 import 'dart:isolate';
 
 typedef ThreadHandler = dynamic Function();
@@ -15,6 +16,14 @@ class SingleIsolate {
   static void log(Object? object) {
     if (!openDebug) return;
     print(object);
+  }
+
+  static Future<T> compute<T>(ThreadHandler threadHandler) {
+    Completer<T> completer = Completer<T>();
+    SingleIsolate().init(threadHandler: threadHandler, mainHandler: (data) {
+      completer.complete(data);
+    });
+    return completer.future;
   }
 
   /// 最大创建isolate数量: 最好只有一个子线程在跑，多个会形成拥挤。
