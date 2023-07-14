@@ -50,6 +50,8 @@ dependencies:
   flutter_colorpicker: ^1.0.3
   url_launcher: any
   logger: any
+  easy_isolate: ^1.3.0
+  isolate_handler: ^1.0.2
 
 #  flutter_echart: ^1.0.0
 #Error: Cannot run with sound null safety, because the following dependencies
