@@ -4,7 +4,7 @@ import 'dart:isolate';
 import 'worker.dart';
 
 typedef ParallelCallback<T, R> = FutureOr<R> Function({T? item});
-
+/// 这个代码是非常值得学习的地方，而且设计思想也非常值得学习！
 class Parallel {
   static FutureOr<R> run<T, R>(ParallelCallback<T, R> handler,
       {T? entryValue}) async {
@@ -95,6 +95,7 @@ class _ParallelForeachParams<T> {
   _ParallelForeachParams(this.item, this.handler);
 }
 
+/// 这个类的设计也非常有意思！！！
 class _ParallelRunParams<T, R> {
   final T? item;
   final ParallelCallback<T, R> _handler;

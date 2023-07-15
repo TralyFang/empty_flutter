@@ -49,7 +49,8 @@ class Worker {
     _mainReceivePort.listen((message) async {
       if (message is SendPort) {
         _isolateSendPort = message;
-        if (!(initialMessage is _NoParameterProvided)) {
+        if (initialMessage is! _NoParameterProvided) {
+          // 共享初始化信息给新的isolate
           _isolateSendPort.send(initialMessage);
         }
         _completer.complete();
@@ -60,7 +61,7 @@ class Worker {
         await handlerFuture;
       }
     }).onDone(() async {
-      await Future.delayed(Duration(seconds: 2));
+      await Future.delayed(const Duration(seconds: 2));
       errorPort?.close();
       exitPort?.close();
     });
@@ -93,8 +94,13 @@ class Worker {
     params.mainSendPort.send(isolateReceiverPort.sendPort);
 
     await for (var data in isolateReceiverPort) {
+      // 回调给使用者来运算，并由使用者决定发送回mainIsolate。
       final handlerFuture = params.isolateHandler(
           data, params.mainSendPort, params.errorSendPort?.send ?? (_) {});
+      // params.errorSendPort?.send ?? (_) {} 这个代码就很有意思，直接构建一个方法体
+      // 由使用者来触发，错误信息。
+
+      // 如果是队列的话，那就排队解决。
       if (params.queueMode) {
         await handlerFuture;
       }
