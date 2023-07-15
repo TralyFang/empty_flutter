@@ -1,9 +1,4 @@
-// Copyright (c) 2021, the Dart project authors. Please see the AUTHORS file
-// for details. All rights reserved. Use of this source code is governed by a
-// BSD-style license that can be found in the LICENSE file.
 
-// Read the file, spawn an isolate, send the file contents to the spawned
-// isolate, and wait for the parsed JSON.
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
@@ -17,24 +12,22 @@ Future<void> main() async {
 }
 
 /// 展示了如何从主 isolate 发送消息至生成的 isolate。
+/// 源码 https://github.com/dart-lang/samples/blob/main/isolates/bin/send_and_receive.dart
+/// 文档 https://dart.cn/guides/language/concurrency#how-isolates-work
 
-// Spawns an isolate and sends a [filename] as the first message.
-// Waits to receive a message from the the spawned isolate containing the
-// parsed JSON.
 Future<Map<String, dynamic>> _spawnAndReceive(String fileName) async {
   final p = ReceivePort();
   await Isolate.spawn(_readAndParseJson, [p.sendPort, fileName]);
+  // 接收运算结果
   return (await p.first) as Map<String, dynamic>;
 }
 
-// The entrypoint that runs on the spawned isolate. Reads the contents of
-// fileName, decodes the JSON, and sends the result back to the main
-// isolate.
 void _readAndParseJson(List<dynamic> args) async {
   SendPort responsePort = args[0];
   String fileName = args[1];
 
   final fileData = await File(fileName).readAsString();
   final result = jsonDecode(fileData);
+  // 结束运算，顺便把结果返回去
   Isolate.exit(responsePort, result);
 }
