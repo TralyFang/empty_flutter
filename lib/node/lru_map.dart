@@ -87,6 +87,10 @@ class LRUMap<K, V> {
   // 只处理相连的 所以计算的复杂度0(1)
   void _moveToHead(_Link link) {
 
+    // head L L T L L tail
+    // T 为目标移动对象
+
+
     // 已经在头部了
     if (link == _head) return;
 
