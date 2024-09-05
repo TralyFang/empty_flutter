@@ -18,7 +18,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.12.0 <3.0.0"
+  sdk: ">=3.0.0 <4.0.0"
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -37,7 +37,7 @@ dependencies:
   device_info: ^2.0.3
   platform_device_id: ^1.0.1
   device_info_plus: ^4.0.0
-  websocket_channel_wrapper: ^1.1.4
+#  websocket_channel_wrapper: ^1.1.4
 #  firebase_messaging: 11.2.7
 #  agora_rtc_engine:
 #    git:
@@ -55,7 +55,7 @@ dependencies:
   shimmer_animation: ^2.1.0+1 # 骨架动画
   flutter_inappwebview: any
   flutter_barrage: ^0.5.4 #弹幕
-  flutter_uploader: ^1.2.1 #后台上传
+#  flutter_uploader: ^1.2.1 #后台上传
 
 #  flutter_echart: ^1.0.0
 #Error: Cannot run with sound null safety, because the following dependencies

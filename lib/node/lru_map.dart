@@ -9,7 +9,8 @@
 * 如果存在，则将该节点移动到链表头部；
 * 如果不存在，则将新节点添加到链表头部。
 * 当链表空间已满时，则将链表尾部的节点删除。
-* */
+* *//*
+
 class LRUMap<K, V> {
   _Link? _head;
   _Link? _tail;
@@ -135,6 +136,7 @@ class _Link<K, V> implements MapEntry<K, V> {
 
   _Link(this.key, this.value, this.size);
 }
+*/
 /*
 * 双向链表的应用场景非常广泛，常用于以下情况：
 
